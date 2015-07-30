@@ -18,6 +18,8 @@
 
 ## API說明
 
+Test server: ```dchome.sytes.net:25565```
+
 ### 硬體端Api
 #### GET測試
 ```
