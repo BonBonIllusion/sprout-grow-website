@@ -1,7 +1,8 @@
 <?php
-$servername = "localhost";
-$username = "sprout";
-$password = "nckume106c";
+require_once("db.php");
+$servername = $_DB["host"];
+$username = $_DB["username"];
+$password = $_DB["password"];
 
 $temperature = $_POST["temp"];
 $humid = $_POST["humid"];
