@@ -1,18 +1,19 @@
 # 全自動芽菜機 - 監控及設定網頁
 
-## 目錄
+## TODO List
 ### 硬體端Api
-- [x] [上傳Sensor資料] (#上傳Sensor資料)
-- [ ] [上傳灑水資訊]
-- [x] [上傳排水資訊]
-- [ ] [上傳燈控資訊]
-- [ ] [重置狀態]
-- [ ] [取得排程]
+- [x] 上傳Sensor資料
+- [ ] 上傳灑水資訊
+- [x] 上傳排水資訊
+- [ ] 上傳燈控資訊
+- [ ] 重置狀態
+- [ ] 取得排程
+
 ### 前端Api
-- [ ] [取得Sensor資料]
-- [ ] [取得排水&灑水資訊]
-- [ ] [取得燈控資訊]
-- [ ] [更新排程]
+- [ ] 取得Sensor資料
+- [ ] 取得排水&灑水資訊
+- [ ] 取得燈控資訊
+- [ ] 更新排程
 
 
 ## API說明
@@ -38,6 +39,7 @@ Variables:
   fan
 ```
 溫度和濕度為必要參數，風扇速度等硬體端實作再說
+
 Return:
 ```
 Success: 0
@@ -73,6 +75,7 @@ Error: "Connection failed: Error msg."
 GET /pushdrain.php
 ```
 沒有變數，訪問時就會記一筆排水紀錄
+
 Return:
 ```
 Success: 0
@@ -84,11 +87,19 @@ Url為
 ```
 GET /pushlight.php
 ```
-其餘和灑水資訊上傳相同
+其餘和上傳灑水資訊相同
 
 #### 重置狀態
 
 #### 取得排程
+```
+GET /getschedulestring.php
+```
+Return:
+```
+Success: schedule string
+Error: "Connection failed: Error msg."
+```
 
 ### 前端Api
 #### 取得Sensor資訊
