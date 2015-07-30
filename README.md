@@ -1,26 +1,26 @@
 # 全自動芽菜機 - 監控及設定網頁
 
 ## TODO List
->硬體端Api<br>
-[ ] 上傳Sensor資料<br>
-[ ] 上傳排水資訊<br>
-[ ] 上傳灑水資訊<br>
-[ ] 上傳燈控資訊<br>
-[ ] 重置狀態<br>
-[ ] 取得排程<br>
+### 硬體端Api
+- [x] 上傳Sensor資料
+- [ ] 上傳灑水資訊
+- [x] 上傳排水資訊
+- [ ] 上傳燈控資訊
+- [ ] 重置狀態
+- [ ] 取得排程
 
->前端Api<br>
-[ ] 更新排程<br>
-[ ] 取得Sensor資料<br>
-[ ] 取得排水&灑水資訊<br>
-[ ] 取得燈控資訊<br>
+### 前端Api
+- [ ] 取得Sensor資料
+- [ ] 取得排水&灑水資訊
+- [ ] 取得燈控資訊
+- [ ] 更新排程
 
 ## API說明
 
 ### 硬體端Api
-#### POST測試
+#### GET測試
 ```
-POST /?var=str
+GET /?var=str
 ```
 Return:
 ```
@@ -31,11 +31,11 @@ Hello {$var}!
 ```
 GET /pushsensors.php
 ```
-Variables:
 ```
-temp
-humid
-fan
+Variables:
+  temp
+  humid
+  fan
 ```
 溫度和濕度為必要參數，風扇速度等硬體端實作再說
 
