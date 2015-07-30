@@ -28,10 +28,10 @@ try
     // use exec() because no results are returned
     $conn->exec($sql);
     
-    echo "New record created successfully";
+    echo $_DB['success_msg'];
 
 } catch(PDOException $e) {
-    echo "Connection failed: " . $e->getMessage();
+    echo $_DB["error_msg"] . $e->getMessage();
 }
 
 $conn = null;
