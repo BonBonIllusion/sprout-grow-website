@@ -46,7 +46,7 @@ Error: "Connection failed: Error msg."
 ```
 
 #### 上傳灑水資訊
-開始灑水
+##### 開始灑水
 ```
 GET /pushspour.php
 ```
@@ -57,7 +57,7 @@ Error: "Connection failed: Error msg."
 ```
 開始灑水時先訪問一次，會記錄一筆開始資料並回傳該次紀錄的id
 
-結束灑水
+##### 結束灑水
 ```
 GET /pushspour.php?id=id&stop=1
 ```
@@ -81,6 +81,11 @@ Error: "Connection failed: Error msg."
 ```
 
 #### 上傳燈控資訊
+url為
+```
+GET /pushlight.php
+```
+其餘和灑水資訊上傳相同
 
 #### 重置狀態
 
