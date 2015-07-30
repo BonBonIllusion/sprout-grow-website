@@ -16,6 +16,8 @@
 - [ ] 更新排程
 
 
+
+
 ## API說明
 
 Test server: ```dchome.sytes.net:25565```
@@ -27,7 +29,7 @@ GET /?var=str
 ```
 Return:
 ```
-Hello {$var}!
+Hello {$var}! Server time: {Server time in unix epoch}
 ```
 
 #### 上傳Sensor資料
