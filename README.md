@@ -34,7 +34,7 @@ Hello {$var}! Server time: {Server time in unix epoch}
 
 #### 上傳Sensor資料
 ```
-GET /pushsensors.php
+GET /push_sensor.php
 ```
 ```
 Variables:
@@ -53,7 +53,7 @@ Error: "Connection failed: Error msg."
 #### 上傳灑水資訊
 ##### 開始灑水
 ```
-GET /pushspour.php
+GET /push_spour.php
 ```
 Return:
 ```
@@ -64,7 +64,7 @@ Error: "Connection failed: Error msg."
 
 ##### 結束灑水
 ```
-GET /pushspour.php?id=id&stop=1
+GET /push_spour.php?id=id&stop=1
 ```
 Return:
 ```
@@ -76,9 +76,9 @@ Error: "Connection failed: Error msg."
 
 #### 上傳排水資訊
 ```
-GET /pushdrain.php
+GET /push_drain.php
 ```
-沒有變數，訪問時就會記一筆排水紀錄
+沒有參數，訪問時就會記一筆排水紀錄
 
 Return:
 ```
@@ -89,7 +89,7 @@ Error: "Connection failed: Error msg."
 #### 上傳燈控資訊
 Url為
 ```
-GET /pushlight.php
+GET /push_light.php
 ```
 其餘和上傳灑水資訊相同
 
@@ -97,7 +97,7 @@ GET /pushlight.php
 
 #### 取得排程
 ```
-GET /getschedulestring.php
+GET /get_schedule_string.php
 ```
 Return:
 ```
