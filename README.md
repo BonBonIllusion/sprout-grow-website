@@ -131,9 +131,39 @@ A:動作
 ```
 ### 前端Api
 #### 取得Sensor資訊
+```
+GET \get_sensor_data.php
+```
+Return:
+```
+Sensors data in json form.
+```
 
-#### 取得排水&灑水資訊
+#### 取得灑水資訊
+```
+GET \get_spour_data.php
+```
+Return:
+```
+Spour data in json form.
+```
+
+#### 取得排水資訊
+```
+GET \get_drain_data.php
+```
+Return:
+```
+Drain data in json form.
+```
 
 #### 取得燈控資訊
+```
+GET \get_light_data.php
+```
+Return:
+```
+Light data in json form.
+```
 
 #### 更新排程
