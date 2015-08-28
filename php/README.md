@@ -130,40 +130,34 @@ A:動作
 	  - C關燈(Close)
 ```
 ### 前端Api
-#### 取得Sensor資訊
+#### 取得單筆資訊(sensors、排水)
 ```
-GET \get_sensor_data.php
+GET \get_single_data.php
+```
+```
+Variables:
+mode(sensors/drain)
+start(start time in unix timestamp)
+end(end time in unix timestamp)
 ```
 Return:
 ```
-Sensors data in json form.
+Single data in json form.
 ```
 
-#### 取得灑水資訊
+#### 取得期間資訊(灑水、燈控)
 ```
-GET \get_spour_data.php
+GET \get_duration_data.php
 ```
-Return:
 ```
-Spour data in json form.
-```
-
-#### 取得排水資訊
-```
-GET \get_drain_data.php
+Variables:
+mode(spour/light)
+start(start time in unix timestamp)
+end(end time in unix timestamp)
 ```
 Return:
 ```
-Drain data in json form.
-```
-
-#### 取得燈控資訊
-```
-GET \get_light_data.php
-```
-Return:
-```
-Light data in json form.
+Duration data in json form.
 ```
 
 #### 更新排程
