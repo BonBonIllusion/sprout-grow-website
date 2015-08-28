@@ -15,8 +15,11 @@ try
     $stmt->execute();
 
     // set the resulting array to associative
-    $result = $stmt->setFetchMode(PDO::FETCH_ASSOC); 
-    echo json_encode($stmt->fetchAll());
+    $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+    $data = $stmt->fetchAll();
+    foreach ($data as $key => $d)
+        $data[$key]["time"] = strtotime($d["time"]);
+    echo json_encode($data);
 
 } catch(PDOException $e) {
     echo "Connection failed: " . $e->getMessage();
