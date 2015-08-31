@@ -29,7 +29,7 @@
 					temperature = temperatureString.map(Number),
 					humidity = humidityString.map(Number);
 			var dataset;
-			var totalPoints = 24;
+			var totalPoints = 25;
 			var updateInterval = 60000*60;
 			var now = new Date().getTime();
 
@@ -135,12 +135,14 @@
 				}
 			}
 
-			function GetData() {
+			function GetData(startTime,endTime) {
+				url = "php/get_single_data.php?mode=sensors&start="+startTime+"&end="+endTime;
+				console.log(url);
 				$.ajaxSetup({
 					cache: false
 				});
 				$.ajax({
-					url: "php/get_single_data.php?mode=sensors",
+					url: url,
 					type: "get",
 					dataType: 'json',
 					success: update,
@@ -167,6 +169,13 @@
 				for (var i = 0; i < totalPoints; i++) {
 					temperature.shift();
 					humidity.shift();
+					if(typeof _data[i*60] == "undefined"){
+						temp = [temperature[22][0]+(60*60*1000), 0];
+						temperature.push(temp);
+						temp = [humidity[22][0]+(60*60*1000), 0];
+						humidity.push(temp);
+						continue;
+					}
 
 					temp = [_data[i*60].time*1000, _data[i*60].temperature];
 					temperature.push(temp);
@@ -201,6 +210,21 @@
 				$.plot($("#tempAndHumiPlot"), dataset, options);
 				//setTimeout(GetData, updateInterval);
 			}
+			
+			var getUrlParameter = function getUrlParameter(sParam) {
+					var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+							sURLVariables = sPageURL.split('&'),
+							sParameterName,
+							i;
+
+					for (i = 0; i < sURLVariables.length; i++) {
+							sParameterName = sURLVariables[i].split('=');
+
+							if (sParameterName[0] === sParam) {
+									return sParameterName[1] === undefined ? true : sParameterName[1];
+							}
+					}
+			};
 
 			$(document).ready(function () {
 				initialData();
@@ -227,7 +251,14 @@
 					}
 				];
 				$.plot($("#tempAndHumiPlot"), dataset, options);
-				GetData();
+				
+				date = getUrlParameter('date');
+				$("#date").val(date);
+				startTime = date === "" ? "2015-08-18T21:45:28Z" : date;
+				console.log(startTime);
+				startTime = Date.parse(startTime)/1000;
+				endTime = startTime + (25*60*60);
+				GetData(startTime, endTime);
 			});
 		</script>
 	</head>
@@ -263,7 +294,14 @@
 						<!-- Content -->
 							<section id="current">
 								<h2>當前狀態</h2>
-								<a class="image fit"><div id="tempAndHumiPlot" style="width:800px; height:450px; margin:0 auto"></div></a>
+									<form id="datePicker" style="text-align: center; margin: 0">
+										<label for="date" style="display: inline-block; font-size: 20px">顯示日期: </label>
+										<input style="color: black" type="date" name="date" id="date">
+										<input style="padding: 0 5px; line-height: 2em; height: 2em;" type="submit" value="更新">
+									</form>
+								<a class="image fit">
+									<div id="tempAndHumiPlot" style="width:800px; height:450px; margin:50px auto"></div>
+								</a>
 							</section>
 							<section id="schedule">
 								<h2>種植排程</h2>
