@@ -13,6 +13,223 @@
 		<link rel="stylesheet" href="assets/css/main.css" />
 		<!--[if lte IE 9]><link rel="stylesheet" href="assets/css/ie9.css" /><![endif]-->
 		<!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
+		<script type="text/javascript" src="assets/js/jquery-1.11.3.min.js"></script>
+		<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="assets/js/flot/excanvas.min.js"></script><![endif]-->
+		<script type="text/javascript" src="assets/js/flot/jquery.flot.min.js"></script>
+		<script type="text/javascript" src="assets/js/flot/jquery.flot.js"></script>
+		<script type="text/javascript" src="assets/js/flot/jquery.flot.time.js"></script>
+		<script type="text/javascript" src="assets/js/flot/jquery.flot.symbol.js"></script>
+		<script type="text/javascript" src="assets/js/flot/flot-axislabels-master/jquery.flot.axislabels.js"></script>
+
+		<script type="text/javascript">
+			var timeString = [],
+					temperatureString = [],
+					humidityString = [];
+			var time = timeString,
+					temperature = temperatureString.map(Number),
+					humidity = humidityString.map(Number);
+			var dataset;
+			var totalPoints = 24;
+			var updateInterval = 60000*60;
+			var now = new Date().getTime();
+
+			var options = {
+				series: {
+					lines: {
+						show: true,
+						lineWidth: 1.2
+					},
+					points: {
+						radius: 3,
+						show: true
+					}
+				},
+
+				xaxis: {
+					mode: "time",
+					tickSize: [1, "hour"],
+					tickFormatter: function (v, axis) { //help
+						var date = new Date(v);
+
+						if (date.getHours() % 3 == 0) {
+							var hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+							var minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+							var seconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+
+							return hours + ":" + minutes + ":" + seconds;
+						} else {
+							return "";
+						}
+					},
+					axisLabel: "時間",
+					axisLabelUseCanvas: true,
+					axisLabelFontSizePixels: 12,
+					axisLabelColour: '#777',
+					axisLabelPadding: 10,
+					font: {
+						size: 16,
+						color: "white"
+					}
+				},
+
+				yaxes: [
+					{
+						min: 0,
+						max: 50,
+						tickSize: 5,
+						tickFormatter: function (v, axis) {
+							if (v % 5 == 0) {
+								return v + " °C";
+							} else {
+								return "";
+							}
+						},
+						axisLabel: "溫度",
+						axisLabelUseCanvas: true,
+						axisLabelFontSizePixels: 12,
+						axisLabelColour: '#777',
+						axisLabelPadding: 6,
+						font: {
+							size: 16,
+							color: "white"
+						}
+					},
+					{
+						min: 0,
+						max: 100,
+						tickSize: 5,
+						tickFormatter: function (v, axis) {
+							if (v % 5 == 0) {
+								return v + " %";
+							} else {
+								return "";
+							}
+						},
+						position: "right",
+						axisLabel: "濕度",
+						axisLabelUseCanvas: true,
+						axisLabelFontSizePixels: 12,
+						axisLabelColour: '#777',
+						axisLabelPadding: 6,
+						font: {
+							size: 16,
+							color: "white"
+						}
+					}
+				],
+
+				grid: {
+					backgroundColor: {
+						colors: ["#ffffff", "#EDF5FF"]
+					}
+				}
+			};
+
+			function initialData() {
+				for (var i = 0; i < totalPoints; i++) {
+					var temp = [now += updateInterval, 0]; //help
+
+					//time.push(temp);
+					temperature.push(temp);
+					humidity.push(temp);
+				}
+			}
+
+			function GetData() {
+				$.ajaxSetup({
+					cache: false
+				});
+				$.ajax({
+					url: "php/get_single_data.php?mode=sensors",
+					type: "get",
+					dataType: 'json',
+					success: update,
+					error: function (xhr, ajaxOptions, thrownError) {
+						alert(thrownError);
+					}
+				});
+			}
+
+			var temp;
+
+			function update(_data) {
+				//					time.shift();
+				// temperature.shift();
+				// humidity.shift();
+
+				// now += updateInterval
+				//
+				// temp = [now, _data.temperature];
+				// temperature.push(temp);
+				// temp = [now, _data.humid];
+				// humidity.push(temp);
+				console.log(_data);
+				for (var i = 0; i < totalPoints; i++) {
+					temperature.shift();
+					humidity.shift();
+
+					temp = [_data[i*60].time*1000, _data[i*60].temperature];
+					temperature.push(temp);
+					temp = [_data[i*60].time*1000, _data[i*60].humid];
+					humidity.push(temp);
+				}
+
+				dataset = [
+					{
+						label: "溫度°C",
+						data: temperature,
+						lines: {
+							fill: true,
+							linewidth: 1.2
+						},
+						color: "#FF9933",
+						yaxis: 1
+					},
+					{
+						label: "濕度%",
+						data: humidity,
+						lines: {
+							fill: true,
+							linewidth: 1.2
+						},
+						color: "#00CCFF",
+						yaxis: 2
+					}
+				];
+
+
+				$.plot($("#tempAndHumiPlot"), dataset, options);
+				//setTimeout(GetData, updateInterval);
+			}
+
+			$(document).ready(function () {
+				initialData();
+				dataset = [
+					{
+						label: "溫度",
+						data: temperature,
+						lines: {
+							fill: true,
+							linewidth: 1.2
+						},
+						color: "#FF9933",
+						yaxis: 1
+					},
+					{
+						label: "濕度",
+						data: humidity,
+						lines: {
+							fill: true,
+							linewidth: 1.2
+						},
+						color: "#00CCFF",
+						yaxis: 2
+					}
+				];
+				$.plot($("#tempAndHumiPlot"), dataset, options);
+				GetData();
+			});
+		</script>
 	</head>
 	<body>
 		<div id="page-wrapper">
@@ -26,9 +243,9 @@
 						<li><a href="social.html">社群</a></li>
 						<li><a href="mine.html" class="button special">我的芽菜機</a>
 							<ul>
-								<li><a href="#">當前狀態</a></li>
-								<li><a href="#">種植排程</a></li>
-								<li><a href="#">歷史資料</a></li>
+								<li><a href="#current">當前狀態</a></li>
+								<li><a href="#schedule">種植排程</a></li>
+								<li><a href="#history">歷史資料</a></li>
 							</ul>
 						</li>
 					</ul>
@@ -44,20 +261,15 @@
 						</header>
 
 						<!-- Content -->
-							<section id="content">
-								<a href="#" class="image fit"><img src="images/pic07.jpg" alt="" /></a>
-								<h3>Dolore Amet Consequat</h3>
-								<p>Aliquam massa urna, imperdiet sit amet mi non, bibendum euismod est. Curabitur mi justo, tincidunt vel eros ullamcorper, porta cursus justo. Cras vel neque eros. Vestibulum diam quam, mollis at magna consectetur non, malesuada quis augue. Morbi tincidunt pretium interdum est. Curabitur mi justo, tincidunt vel eros ullamcorper, porta cursus justo. Cras vel neque eros. Vestibulum diam cubilia adipiscing interdum aliquet aliquet placerat cubilia accumsan cep ante nullam adipiscing tortor odio. Iaculis adipiscing accumsan nascetur in cras. Lacinia placerat.</p>
-								<p>Vestibulum diam quam, mollis at consectetur non, malesuada quis augue. Morbi tincidunt pretium interdum. Morbi mattis elementum orci, nec dictum porta cursus justo. Quisque ultricies lorem in ligula condimentum, et egestas turpis sagittis. Cras ac nunc urna. Nullam eget lobortis purus. Phasellus vitae tortor non est placerat tristique faucibus magna adipiscing aliquet blandit nisi dolor accumsan nascetur lorem. Vis enim. Curae. Mi arcu vis aliquam ipsum non accumsan ac mi faucibus amet eu accumsan erat interdum semper accumsan. Eu sagittis tellus accumsan neque lorem penatibus in porttitor. Vivamus commodo curae. Condimentum lobortis praesent id ac lorem. Lorem vis ipsum dolor feugiat consequat dolore adipiscing.</p>
-								<h3>Sed Magna Ornare</h3>
-								<p>In vestibulum massa quis arcu lobortis tempus. Nam pretium arcu in odio vulputate luctus. Suspendisse euismod lorem eget lacinia fringilla. Sed sed felis justo. Nunc sodales elit in laoreet aliquam. Nam gravida, nisl sit amet iaculis porttitor, risus nisi rutrum metus. In accumsan lorem nunc ultrices a ac eu accumsan ac id nullam. Nec lobortis. Faucibus. Mi commodo laoreet arcu at non mi lacinia aliquet non lobortis phasellus accumsan nascetur varius. Integer orci porttitor eu faucibus aliquet faucibus ac accumsan adipiscing accumsan odio. Ut adipiscing.</p>
-								<ul>
-									<li>Faucibus orci lobortis ac adipiscing integer.</li>
-									<li>Col accumsan arcu mi aliquet placerat.</li>
-									<li>Lobortis vestibulum ut magna tempor massa nascetur.</li>
-									<li>Blandit massa non blandit tempor interdum.</li>
-									<li>Lacinia mattis arcu nascetur lobortis.</li>
-								</ul>
+							<section id="current">
+								<h2>當前狀態</h2>
+								<a class="image fit"><div id="tempAndHumiPlot" style="width:800px; height:450px; margin:0 auto"></div></a>
+							</section>
+							<section id="schedule">
+								<h2>種植排程</h2>
+							</section>
+							<section id="history">
+								<h2>歷史資料</h2>
 							</section>
 
 					</div>
@@ -81,7 +293,7 @@
 		</div>
 
 		<!-- Scripts -->
-			<script src="assets/js/jquery.min.js"></script>
+			<!-- script src="assets/js/jquery.min.js"></script -->
 			<script src="assets/js/jquery.scrolly.min.js"></script>
 			<script src="assets/js/jquery.dropotron.min.js"></script>
 			<script src="assets/js/jquery.scrollex.min.js"></script>
