@@ -229,7 +229,7 @@ $(document).ready(function () {
   $.plot($("#tempAndHumiPlot"), dataset, options);
 
   date = getUrlParameter('date');
-  startTime = date === "" ? "2015-08-18" : date;
+  startTime = (date === "" || typeof date === "undefined") ? "2015-08-19" : date;
   $("#datepicker").val(startTime);
   console.log(startTime);
   startTime = Date.parse(startTime)/1000;
