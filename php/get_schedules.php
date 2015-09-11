@@ -15,18 +15,15 @@ try
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     // execute select
-    $stmt = $conn->prepare("SELECT * FROM schedule ORDER BY schedule_id DESC LIMIT 1"); 
+    $stmt = $conn->prepare("SELECT * FROM schedule ORDER BY schedule_id DESC");
     $stmt->execute();
 
     // set the resulting array to associative
     $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-    foreach($stmt->fetchAll() as $k => $v) {
-        echo time().','.$v["value"].','.$flags["on_scheduled"];
-        if(!$flags["on_scheduled"]) {
-            $flags["on_scheduled"] = 1;
-            write_ini_file($flags, "flags");
-        }
-    }
+    $data = $stmt->fetchAll();
+
+	  $data = array_values($data);
+    echo json_encode($data);
 
 } catch(PDOException $e) {
     echo "Connection failed: " . $e->getMessage();

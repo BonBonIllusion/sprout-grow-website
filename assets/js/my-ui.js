@@ -25,13 +25,13 @@ $(function() {
       str += $(this).attr("str");
     });
     $("#water-mode").val(str);
-    get_schedule();
+    outputSchedule();
   })
 
   $("#wclear").click(function () {
     $("#wpreview li").remove();
     $("#water-mode").val("");
-    get_schedule();
+    outputSchedule();
   })
 
   $("#add-lschedule").click(function () {
@@ -49,24 +49,37 @@ $(function() {
       str += $(this).attr("str");
     });
     $("#light-mode").val(str);
-    get_schedule();
+    outputSchedule();
   })
 
   $("#lclear").click(function () {
     $("#lpreview li").remove();
     $("#light-mode").val("");
-    get_schedule();
+    outputSchedule();
   })
 
-  $("#soak").change(get_schedule);
-  $("#chwater").change(get_schedule);
-  $("#water-during").change(get_schedule);
-  $("#water-mode").change(get_schedule);
-  $("#light-during").change(get_schedule);
-  $("#light-mode").change(get_schedule);
+  $("#soak").change(outputSchedule);
+  $("#chwater").change(outputSchedule);
+  $("#water-during").change(outputSchedule);
+  $("#water-mode").change(outputSchedule);
+  $("#light-during").change(outputSchedule);
+  $("#light-mode").change(outputSchedule);
+
+
+  $.ajax({
+    url: "php/update_schedule.php",
+    type: "get",
+    dataType: 'json',
+    success: function (data) {
+      foreach()
+    },
+    error: function (xhr, ajaxOptions, thrownError) {
+      alert(thrownError);
+    }
+  });
 });
 
-function get_schedule() {
+function outputSchedule() {
   var soak = $("#soak").val();
   var chwater = $("#chwater").val();
   var wd = $("#water-during").val();
@@ -74,6 +87,28 @@ function get_schedule() {
   var ld = $("#light-during").val();
   var lm = $("#light-mode").val();
   var str = soak + "," + chwater + "," + wd + "," + wm + "," + ld + "," + lm;
-  console.log(str);
   $("#result").val(str);
+}
+
+function updateSchedule(startTime,endTime) {
+  var str = $("#result").val();
+  url = "php/update_schedule.php";
+  console.log(url);
+  console.log(str);
+  $.ajaxSetup({
+    cache: false
+  });
+  $.ajax({
+    url: url,
+    type: "post",
+    data: {schedule: str},
+    dataType: 'json',
+    success: function () {
+
+    },
+    error: function (xhr, ajaxOptions, thrownError) {
+      alert(thrownError);
+      alert(this.data);
+    }
+  });
 }

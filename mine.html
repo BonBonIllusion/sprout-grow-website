@@ -87,7 +87,7 @@
 									</div>
 
 									<div class="scheduler" id="water-scheduler">
-										灑水排程安排器
+										灑水排程安排
 
 										<div>
 											時間 <input type="text" name="wtime" id="wtime" value="" class="timepicker">
@@ -96,14 +96,14 @@
 											  <option value ="W">灑水</option>
 											  <option value ="P">泡水</option>
 											</select>
-											<input style="padding: 0 5px; line-height: 2em; height: 2em; width: auto;" type="button" value="新增" id="add-wschedule">
+											<input type="button" value="新增" id="add-wschedule">
 										</div>
 
 										<ul class="preview" id="wpreview"></ul>
 
 										<div>
-											<input style="padding: 0 5px; line-height: 2em; height: 2em; width: auto;" type="button" value="完成" id="woutput">
-											<input style="padding: 0 5px; line-height: 2em; height: 2em; width: auto;" type="button" value="清除" id="wclear">
+											<input type="button" value="完成" id="woutput">
+											<input type="button" value="清除" id="wclear">
 										</div>
 									</div>
 
@@ -113,7 +113,7 @@
 									</div>
 
 									<div class="scheduler" id="light-scheduler">
-										燈控排程安排器
+										燈控排程安排
 
 										<div>
 											時間 <input type="text" name="ltime" id="ltime" value="" class="timepicker">
@@ -122,25 +122,40 @@
 											  <option value ="O">開燈</option>
 											  <option value ="C">關燈</option>
 											</select>
-											<input style="padding: 0 5px; line-height: 2em; height: 2em; width: auto;" type="button" value="新增" id="add-lschedule">
+											<input type="button" value="新增" id="add-lschedule">
 										</div>
 
 										<ul class="preview" id="lpreview"></ul>
 
 										<div>
-											<input style="padding: 0 5px; line-height: 2em; height: 2em; width: auto;" type="button" value="完成" id="loutput">
-											<input style="padding: 0 5px; line-height: 2em; height: 2em; width: auto;" type="button" value="清除" id="lclear">
+											<input type="button" value="完成" id="loutput">
+											<input type="button" value="清除" id="lclear">
 										</div>
 									</div>
 
 									<div>
 										結果 <input type="text" name="result" id="result" value="">
+										<input type="button" value="更新" id="wclear">
 									</div>
 
 								</form>
 							</section>
 							<section id="history">
 								<h2>歷史資料</h2>
+								<table>
+									<thead>
+										<tr>
+											<th>描述</th>
+											<th>內容</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<th>15351</th>
+											<th>564654</th>
+										</tr>
+									</tbody>
+								</table>
 							</section>
 
 					</div>

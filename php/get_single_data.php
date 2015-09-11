@@ -14,16 +14,16 @@ if( isset($_GET['start']) && isset($_GET['end']) )
     $end_time = $_GET["end"];
 }
 
-try 
+try
 {
     $conn = new PDO("mysql:host=$servername;dbname=sprout", $username, $password);
     // set the PDO error mode to exception
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-	$sql = "SELECT * FROM ".$mode;
-    
+    $sql = "SELECT * FROM ".$mode;
+
     // execute select
-    $stmt = $conn->prepare($sql); 
+    $stmt = $conn->prepare($sql);
     $stmt->execute();
 
     // set the resulting array to associative
