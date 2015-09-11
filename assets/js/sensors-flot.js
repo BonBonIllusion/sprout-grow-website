@@ -229,8 +229,8 @@ $(document).ready(function () {
   $.plot($("#tempAndHumiPlot"), dataset, options);
 
   date = getUrlParameter('date');
-  $("#date").val(date);
   startTime = date === "" ? "2015-08-18" : date;
+  $("#datepicker").val(startTime);
   console.log(startTime);
   startTime = Date.parse(startTime)/1000;
   endTime = startTime + (25*60*60);
