@@ -21,246 +21,16 @@
 		<script type="text/javascript" src="assets/js/flot/jquery.flot.symbol.js"></script>
 		<script type="text/javascript" src="assets/js/flot/flot-axislabels-master/jquery.flot.axislabels.js"></script>
 
-		<script type="text/javascript">
-			var timeString = [],
-					temperatureString = [],
-					humidityString = [];
-			var time = timeString,
-					temperature = temperatureString.map(Number),
-					humidity = humidityString.map(Number);
-			var dataset;
-			var totalPoints = 25;
-			var updateInterval = 60000*60;
-			var now = new Date().getTime();
+		<script type="text/javascript" src="assets/js/sensors-flot.js"></script>
 
-			var options = {
-				series: {
-					lines: {
-						show: true,
-						lineWidth: 1.2
-					},
-					points: {
-						radius: 3,
-						show: true
-					}
-				},
-
-				xaxis: {
-					mode: "time",
-					tickSize: [1, "hour"],
-					tickFormatter: function (v, axis) { //help
-						var date = new Date(v);
-
-						if (date.getHours() % 3 == 0) {
-							var hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
-							var minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
-							var seconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
-
-							return hours + ":" + minutes + ":" + seconds;
-						} else {
-							return "";
-						}
-					},
-					axisLabel: "時間",
-					axisLabelUseCanvas: true,
-					axisLabelFontSizePixels: 12,
-					axisLabelColour: '#777',
-					axisLabelPadding: 10,
-					font: {
-						size: 16,
-						color: "white"
-					}
-				},
-
-				yaxes: [
-					{
-						min: 0,
-						max: 50,
-						tickSize: 5,
-						tickFormatter: function (v, axis) {
-							if (v % 5 == 0) {
-								return v + " °C";
-							} else {
-								return "";
-							}
-						},
-						axisLabel: "溫度",
-						axisLabelUseCanvas: true,
-						axisLabelFontSizePixels: 12,
-						axisLabelColour: '#777',
-						axisLabelPadding: 6,
-						font: {
-							size: 16,
-							color: "white"
-						}
-					},
-					{
-						min: 0,
-						max: 100,
-						tickSize: 5,
-						tickFormatter: function (v, axis) {
-							if (v % 5 == 0) {
-								return v + " %";
-							} else {
-								return "";
-							}
-						},
-						position: "right",
-						axisLabel: "濕度",
-						axisLabelUseCanvas: true,
-						axisLabelFontSizePixels: 12,
-						axisLabelColour: '#777',
-						axisLabelPadding: 6,
-						font: {
-							size: 16,
-							color: "white"
-						}
-					}
-				],
-
-				grid: {
-					backgroundColor: {
-						colors: ["#ffffff", "#EDF5FF"]
-					}
-				}
-			};
-
-			function initialData() {
-				for (var i = 0; i < totalPoints; i++) {
-					var temp = [now += updateInterval, 0]; //help
-
-					//time.push(temp);
-					temperature.push(temp);
-					humidity.push(temp);
-				}
-			}
-
-			function GetData(startTime,endTime) {
-				url = "php/get_single_data.php?mode=sensors&start="+startTime+"&end="+endTime;
-				console.log(url);
-				$.ajaxSetup({
-					cache: false
-				});
-				$.ajax({
-					url: url,
-					type: "get",
-					dataType: 'json',
-					success: update,
-					error: function (xhr, ajaxOptions, thrownError) {
-						alert(thrownError);
-					}
-				});
-			}
-
-			var temp;
-
-			function update(_data) {
-				//					time.shift();
-				// temperature.shift();
-				// humidity.shift();
-
-				// now += updateInterval
-				//
-				// temp = [now, _data.temperature];
-				// temperature.push(temp);
-				// temp = [now, _data.humid];
-				// humidity.push(temp);
-				console.log(_data);
-				for (var i = 0; i < totalPoints; i++) {
-					temperature.shift();
-					humidity.shift();
-					if(typeof _data[i*60] == "undefined"){
-						temp = [temperature[22][0]+(60*60*1000), 0];
-						temperature.push(temp);
-						temp = [humidity[22][0]+(60*60*1000), 0];
-						humidity.push(temp);
-						continue;
-					}
-
-					temp = [_data[i*60].time*1000, _data[i*60].temperature];
-					temperature.push(temp);
-					temp = [_data[i*60].time*1000, _data[i*60].humid];
-					humidity.push(temp);
-				}
-
-				dataset = [
-					{
-						label: "溫度°C",
-						data: temperature,
-						lines: {
-							fill: true,
-							linewidth: 1.2
-						},
-						color: "#FF9933",
-						yaxis: 1
-					},
-					{
-						label: "濕度%",
-						data: humidity,
-						lines: {
-							fill: true,
-							linewidth: 1.2
-						},
-						color: "#00CCFF",
-						yaxis: 2
-					}
-				];
+		<!-- jQuery-ui -->
+		<script type="text/javascript" src="assets/js/jquery-ui.js"></script>
+		<script type="text/javascript" src="assets/js/jquery.timepicker.min.js"></script>
+		<link rel="stylesheet" href="assets/css/jquery.timepicker.css" />
 
 
-				$.plot($("#tempAndHumiPlot"), dataset, options);
-				//setTimeout(GetData, updateInterval);
-			}
-			
-			var getUrlParameter = function getUrlParameter(sParam) {
-					var sPageURL = decodeURIComponent(window.location.search.substring(1)),
-							sURLVariables = sPageURL.split('&'),
-							sParameterName,
-							i;
-
-					for (i = 0; i < sURLVariables.length; i++) {
-							sParameterName = sURLVariables[i].split('=');
-
-							if (sParameterName[0] === sParam) {
-									return sParameterName[1] === undefined ? true : sParameterName[1];
-							}
-					}
-			};
-
-			$(document).ready(function () {
-				initialData();
-				dataset = [
-					{
-						label: "溫度",
-						data: temperature,
-						lines: {
-							fill: true,
-							linewidth: 1.2
-						},
-						color: "#FF9933",
-						yaxis: 1
-					},
-					{
-						label: "濕度",
-						data: humidity,
-						lines: {
-							fill: true,
-							linewidth: 1.2
-						},
-						color: "#00CCFF",
-						yaxis: 2
-					}
-				];
-				$.plot($("#tempAndHumiPlot"), dataset, options);
-				
-				date = getUrlParameter('date');
-				$("#date").val(date);
-				startTime = date === "" ? "2015-08-18T21:45:28Z" : date;
-				console.log(startTime);
-				startTime = Date.parse(startTime)/1000;
-				endTime = startTime + (25*60*60);
-				GetData(startTime, endTime);
-			});
-		</script>
+		<script type="text/javascript" src="assets/js/my-ui.js"></script>
+		<link rel="stylesheet" href="assets/css/my-ui.css" />
 	</head>
 	<body>
 		<div id="page-wrapper">
@@ -294,9 +64,9 @@
 						<!-- Content -->
 							<section id="current">
 								<h2>當前狀態</h2>
-									<form id="datePicker" style="text-align: center; margin: 0">
+									<form style="text-align: center; margin: 0">
 										<label for="date" style="display: inline-block; font-size: 20px">顯示日期: </label>
-										<input style="color: black" type="date" name="date" id="date">
+										<input style="display: inline-block; width: 200px; height: 2em;" type="text" id="datepicker" name="date">
 										<input style="padding: 0 5px; line-height: 2em; height: 2em;" type="submit" value="更新">
 									</form>
 								<a class="image fit">
@@ -305,6 +75,69 @@
 							</section>
 							<section id="schedule">
 								<h2>種植排程</h2>
+								<form class="schedule-form" action="" method="post">
+									<div>
+										泡水總時程(hr) <input type="number" name="soak" id="soak" value="">
+										多久換水(hr) <input type="number" name="chwater" id="chwater" value="">
+									</div>
+
+									<div>
+										灑水總時程(day) <input type="number" name="water-during" id="water-during" value="">
+										灑水排程(每日) <input type="text" name="water-mode" id="water-mode" value="">
+									</div>
+
+									<div class="scheduler" id="water-scheduler">
+										灑水排程安排器
+
+										<div>
+											時間 <input type="text" name="wtime" id="wtime" value="" class="timepicker">
+											動作
+											<select id="waction">
+											  <option value ="W">灑水</option>
+											  <option value ="P">泡水</option>
+											</select>
+											<input style="padding: 0 5px; line-height: 2em; height: 2em; width: auto;" type="button" value="新增" id="add-wschedule">
+										</div>
+
+										<ul class="preview" id="wpreview"></ul>
+
+										<div>
+											<input style="padding: 0 5px; line-height: 2em; height: 2em; width: auto;" type="button" value="完成" id="woutput">
+											<input style="padding: 0 5px; line-height: 2em; height: 2em; width: auto;" type="button" value="清除" id="wclear">
+										</div>
+									</div>
+
+									<div>
+										燈控開始日(第幾日) <input type="number" name="light-during" id="light-during" value="">
+										燈控排程(每日) <input type="text" name="light-mode" id="light-mode" value="">
+									</div>
+
+									<div class="scheduler" id="light-scheduler">
+										燈控排程安排器
+
+										<div>
+											時間 <input type="text" name="ltime" id="ltime" value="" class="timepicker">
+											動作
+											<select id="laction">
+											  <option value ="O">開燈</option>
+											  <option value ="C">關燈</option>
+											</select>
+											<input style="padding: 0 5px; line-height: 2em; height: 2em; width: auto;" type="button" value="新增" id="add-lschedule">
+										</div>
+
+										<ul class="preview" id="lpreview"></ul>
+
+										<div>
+											<input style="padding: 0 5px; line-height: 2em; height: 2em; width: auto;" type="button" value="完成" id="loutput">
+											<input style="padding: 0 5px; line-height: 2em; height: 2em; width: auto;" type="button" value="清除" id="lclear">
+										</div>
+									</div>
+
+									<div>
+										結果 <input type="text" name="result" id="result" value="">
+									</div>
+
+								</form>
 							</section>
 							<section id="history">
 								<h2>歷史資料</h2>
