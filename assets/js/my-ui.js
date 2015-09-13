@@ -1,8 +1,7 @@
-
 $(function() {
-  $( "#datepicker" ).datepicker({
+  $("#datepicker").datepicker({
     dateFormat: "yy-mm-dd",
-    dayNames: [ "日", "一", "二", "三", "四", "五", "六" ]
+    dayNames: ["日", "一", "二", "三", "四", "五", "六"]
   });
 
   $('.timepicker').timepicker({
@@ -10,49 +9,55 @@ $(function() {
     'timeFormat': 'H:i'
   })
 
-  $("#add-wschedule").click(function () {
-    var time = $("#wtime").val().replace(":","");
+  $("#add-wschedule").click(function() {
+    var time = $("#wtime").val().replace(":", "");
     var action = $("#waction").val();
     var str = "#" + time + action;
     var text = $("#wtime").val() + " " + $("#waction option:selected").text()
-    $("#wpreview").append($('<li>',{str: str, text: text}))
+    $("#wpreview").append($('<li>', {
+      str: str,
+      text: text
+    }))
   })
 
-  $("#woutput").click(function () {
+  $("#woutput").click(function() {
     var list = $("#wpreview li");
     var str = "";
-    list.each(function (index) {
+    list.each(function(index) {
       str += $(this).attr("str");
     });
     $("#water-mode").val(str);
     outputSchedule();
   })
 
-  $("#wclear").click(function () {
+  $("#wclear").click(function() {
     $("#wpreview li").remove();
     $("#water-mode").val("");
     outputSchedule();
   })
 
-  $("#add-lschedule").click(function () {
-    var time = $("#ltime").val().replace(":","");
+  $("#add-lschedule").click(function() {
+    var time = $("#ltime").val().replace(":", "");
     var action = $("#laction").val();
     var str = "#" + time + action;
     var text = $("#ltime").val() + " " + $("#laction option:selected").text()
-    $("#lpreview").append($('<li>',{str: str, text: text}))
+    $("#lpreview").append($('<li>', {
+      str: str,
+      text: text
+    }))
   })
 
-  $("#loutput").click(function () {
+  $("#loutput").click(function() {
     var list = $("#lpreview li");
     var str = "";
-    list.each(function (index) {
+    list.each(function(index) {
       str += $(this).attr("str");
     });
     $("#light-mode").val(str);
     outputSchedule();
   })
 
-  $("#lclear").click(function () {
+  $("#lclear").click(function() {
     $("#lpreview li").remove();
     $("#light-mode").val("");
     outputSchedule();
@@ -67,13 +72,18 @@ $(function() {
 
 
   $.ajax({
-    url: "php/update_schedule.php",
+    url: "php/get_schedules.php",
     type: "get",
     dataType: 'json',
-    success: function (data) {
-      foreach()
+    success: function(data) {
+      data.forEach(function (d) {
+        var descript = d.description === null ? "無描述" : d.description;
+        var schedule = d.value;
+        var tr = "<tr><td>" + descript + "</td><td>" + schedule + "</td><tr>";
+        $("#history-table").append(tr);
+      })
     },
-    error: function (xhr, ajaxOptions, thrownError) {
+    error: function(xhr, ajaxOptions, thrownError) {
       alert(thrownError);
     }
   });
@@ -90,23 +100,25 @@ function outputSchedule() {
   $("#result").val(str);
 }
 
-function updateSchedule(startTime,endTime) {
+function updateSchedule(startTime, endTime) {
   var str = $("#result").val();
   url = "php/update_schedule.php";
-  console.log(url);
-  console.log(str);
+  //console.log(url);
+  //console.log(str);
   $.ajaxSetup({
     cache: false
   });
   $.ajax({
     url: url,
     type: "post",
-    data: {schedule: str},
+    data: {
+      schedule: str
+    },
     dataType: 'json',
-    success: function () {
+    success: function() {
 
     },
-    error: function (xhr, ajaxOptions, thrownError) {
+    error: function(xhr, ajaxOptions, thrownError) {
       alert(thrownError);
       alert(this.data);
     }

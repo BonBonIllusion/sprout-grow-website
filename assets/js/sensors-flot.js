@@ -113,7 +113,7 @@ function initialData() {
 
 function GetData(startTime,endTime) {
   url = "php/get_single_data.php?mode=sensors&start="+startTime+"&end="+endTime;
-  console.log(url);
+  //console.log(url);
   $.ajaxSetup({
     cache: false
   });
@@ -141,7 +141,7 @@ function update(_data) {
   // temperature.push(temp);
   // temp = [now, _data.humid];
   // humidity.push(temp);
-  console.log(_data);
+  //console.log(_data);
   for (var i = 0; i < totalPoints; i++) {
     temperature.shift();
     humidity.shift();
@@ -231,7 +231,7 @@ $(document).ready(function () {
   date = getUrlParameter('date');
   startTime = (date === "" || typeof date === "undefined") ? "2015-08-19" : date;
   $("#datepicker").val(startTime);
-  console.log(startTime);
+  //console.log(startTime);
   startTime = Date.parse(startTime)/1000;
   endTime = startTime + (25*60*60);
   GetData(startTime, endTime);
