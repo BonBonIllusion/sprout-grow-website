@@ -20,6 +20,19 @@
 		<script type="text/javascript" src="assets/js/flot/jquery.flot.time.js"></script>
 		<script type="text/javascript" src="assets/js/flot/jquery.flot.symbol.js"></script>
 		<script type="text/javascript" src="assets/js/flot/flot-axislabels-master/jquery.flot.axislabels.js"></script>
+		<script language="javascript">
+			$(function(){
+				$('#cur').click(function(){
+					$('html,body').animate({scrollTop:$('#current').offset().top-65},800);
+				});
+				$('#sch').click(function(){
+					$('html,body').animate({scrollTop:$('#schedule').offset().top-65},800);
+				});
+				$('#his').click(function(){
+					$('html,body').animate({scrollTop:$('#history').offset().top-65},800);
+				});
+			});
+		</script>
 
 		<script type="text/javascript" src="assets/js/sensors-flot.js"></script>
 
@@ -44,9 +57,9 @@
 						<li><a href="social.html">社群</a></li>
 						<li><a href="mine.html" class="button special">我的芽菜機</a>
 							<ul>
-								<li><a href="#current">當前狀態</a></li>
-								<li><a href="#schedule">種植排程</a></li>
-								<li><a href="#history">歷史資料</a></li>
+								<li><a id="cur">當前狀態</a></li>
+								<li><a id="sch">種植排程</a></li>
+								<li><a id="his">歷史資料</a></li>
 							</ul>
 						</li>
 					</ul>
