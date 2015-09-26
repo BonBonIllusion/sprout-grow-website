@@ -71,6 +71,9 @@ $(function() {
   $("#light-mode").change(outputSchedule);
 
 
+  $("#update").click(updateSchedule);
+
+
   $.ajax({
     url: "php/get_schedules.php",
     type: "get",
@@ -100,7 +103,7 @@ function outputSchedule() {
   $("#result").val(str);
 }
 
-function updateSchedule(startTime, endTime) {
+function updateSchedule() {
   var str = $("#result").val();
   url = "php/update_schedule.php";
   //console.log(url);
@@ -115,12 +118,19 @@ function updateSchedule(startTime, endTime) {
       schedule: str
     },
     dataType: 'json',
-    success: function() {
-
+    success: function(data) {
+      $("#history-table").empty();
+      data.forEach(function (d) {
+        var descript = d.description === null ? "無描述" : d.description;
+        var schedule = d.value;
+        var tr = "<tr><td>" + descript + "</td><td>" + schedule + "</td><tr>";
+        $("#history-table").append(tr);
+      })
     },
     error: function(xhr, ajaxOptions, thrownError) {
       alert(thrownError);
       alert(this.data);
     }
   });
+
 }

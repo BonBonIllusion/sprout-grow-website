@@ -38,7 +38,7 @@ try
     // use exec() because no results are returned
     $conn->exec($sql);
 
-    $sql = "SELECT * FROM schedule";
+    $sql = "SELECT * FROM schedule ORDER BY schedule_id DESC";
 
     // execute select
     $stmt = $conn->prepare($sql);
