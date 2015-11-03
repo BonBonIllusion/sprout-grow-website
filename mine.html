@@ -41,7 +41,6 @@
 		<script type="text/javascript" src="assets/js/jquery.timepicker.min.js"></script>
 		<link rel="stylesheet" href="assets/css/jquery.timepicker.css" />
 
-
 		<script type="text/javascript" src="assets/js/my-ui.js"></script>
 		<link rel="stylesheet" href="assets/css/my-ui.css" />
 	</head>
@@ -87,7 +86,7 @@
 								</a>
 							</section>
 							<section id="schedule">
-								<h2>種植排程</h2>
+								<h2>種植排程小幫手</h2>
 								<form class="schedule-form" action="" method="post">
 									<div>
 										泡水總時程(hr) <input type="number" name="soak" id="soak" value="">
@@ -96,7 +95,6 @@
 
 									<div>
 										灑水總時程(day) <input type="number" name="water-during" id="water-during" value="">
-										灑水排程(每日) <input type="text" name="water-mode" id="water-mode" value="">
 									</div>
 
 									<div class="scheduler" id="water-scheduler">
@@ -117,12 +115,12 @@
 										<div>
 											<input type="button" value="完成" id="woutput">
 											<input type="button" value="清除" id="wclear">
+											結果: <input type="text" name="water-mode" id="water-mode" value="" class="result">
 										</div>
 									</div>
 
 									<div>
 										燈控開始日(第幾日) <input type="number" name="light-during" id="light-during" value="">
-										燈控排程(每日) <input type="text" name="light-mode" id="light-mode" value="">
 									</div>
 
 									<div class="scheduler" id="light-scheduler">
@@ -143,11 +141,13 @@
 										<div>
 											<input type="button" value="完成" id="loutput">
 											<input type="button" value="清除" id="lclear">
+											結果: <input type="text" name="light-mode" id="light-mode" value="" class="result">
 										</div>
 									</div>
 
 									<div>
-										結果 <input type="text" name="result" id="result" value="">
+										結果 <input type="text" name="result" id="result" value="" class="result">
+										描述 <input type="text" name="descript" id="descript" value="" class="descript">
 										<input type="button" value="更新" id="update">
 									</div>
 
@@ -160,6 +160,7 @@
 										<tr>
 											<th>描述</th>
 											<th>內容</th>
+											<th>讀取</th>
 										</tr>
 									</thead>
 									<tbody id="history-table">
@@ -184,6 +185,10 @@
 						<li>&copy; Untitled. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
 					</ul>
 				</footer>
+
+				<!--div id="dialog" title="排程小幫手">
+
+				</div-->
 
 		</div>
 

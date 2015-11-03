@@ -9,7 +9,7 @@ $description = null;
 
 if( isset($_POST['description']) )
 {
-     $fan = $_POST['description'];
+     $description = $_POST['description'];
 }
 
 try

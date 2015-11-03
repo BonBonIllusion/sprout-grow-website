@@ -1,4 +1,13 @@
 $(function() {
+
+  /*$("#dialog").dialog({buttons: {
+        Next: function() {
+            x++; // Increment counter
+            $(this).text(x); // Build dialog based on new value
+        }
+      }
+    });*/
+
   $("#datepicker").datepicker({
     dateFormat: "yy-mm-dd",
     dayNames: ["日", "一", "二", "三", "四", "五", "六"]
@@ -73,24 +82,17 @@ $(function() {
 
   $("#update").click(updateSchedule);
 
-
   $.ajax({
     url: "php/get_schedules.php",
     type: "get",
     dataType: 'json',
-    success: function(data) {
-      data.forEach(function (d) {
-        var descript = d.description === null ? "無描述" : d.description;
-        var schedule = d.value;
-        var tr = "<tr><td>" + descript + "</td><td>" + schedule + "</td><tr>";
-        $("#history-table").append(tr);
-      })
-    },
+    success: updateHistory,
     error: function(xhr, ajaxOptions, thrownError) {
       alert(thrownError);
     }
   });
-});
+
+});//document ready
 
 function outputSchedule() {
   var soak = $("#soak").val();
@@ -105,6 +107,7 @@ function outputSchedule() {
 
 function updateSchedule() {
   var str = $("#result").val();
+  var descript = $("#descript").val();
   url = "php/update_schedule.php";
   //console.log(url);
   //console.log(str);
@@ -115,22 +118,44 @@ function updateSchedule() {
     url: url,
     type: "post",
     data: {
-      schedule: str
+      schedule: str,
+      description: descript
     },
     dataType: 'json',
-    success: function(data) {
-      $("#history-table").empty();
-      data.forEach(function (d) {
-        var descript = d.description === null ? "無描述" : d.description;
-        var schedule = d.value;
-        var tr = "<tr><td>" + descript + "</td><td>" + schedule + "</td><tr>";
-        $("#history-table").append(tr);
-      })
-    },
+    success: updateHistory,
     error: function(xhr, ajaxOptions, thrownError) {
       alert(thrownError);
       alert(this.data);
     }
   });
 
+}
+
+function updateHistory(data) {
+  $("#history-table").empty();
+  data.forEach(function (d) {
+    var descript = d.description === null ? "無描述" : d.description;
+    var schedule = d.value;
+    var tr = "<tr><td>" + descript + "</td><td>" + schedule + "</td><td><button class='modify'>讀取</button></td><tr>";
+    $("#history-table").append(tr);
+    $(".modify").click(function () {
+      var str = $(this).parent().parent().children().get(1).innerHTML;
+
+      var arr = str.split(",");
+      var soak = arr[0];
+      var chwater = arr[1];
+      var wd = arr[2];
+      var wm = arr[3];
+      var ld = arr[4];
+      var lm = arr[5];
+
+      $("#soak").val(soak);
+      $("#chwater").val(chwater);
+      $("#water-during").val(wd);
+      $("#water-mode").val(wm);
+      $("#light-during").val(ld);
+      $("#light-mode").val(lm);
+      $("#result").val(str);
+    });
+  })
 }
